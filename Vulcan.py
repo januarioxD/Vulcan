@@ -234,19 +234,13 @@ if video_url:
 # CENTRAL DE DENÚNCIAS
 # =========================
 
-st.markdown("""
-<div class="vulcan-card">
-    <div class="vulcan-section">
-        🛡️ Central de denúncias
-    </div>
+st.markdown("## 🛡️ Central de denúncias")
 
-    <div class="vulcan-description">
-        Envie evidências em vídeo de possíveis cheaters.
-        Os vídeos serão hospedados na nuvem e poderão
-        ser compartilhados por links públicos.
-    </div>
-</div>
-""", unsafe_allow_html=True)
+st.write(
+    "Envie evidências em vídeo de possíveis cheaters. "
+    "Os vídeos serão hospedados na nuvem e poderão "
+    "ser compartilhados por links públicos."
+)
 
 # =========================
 # CONFIGURAÇÃO
