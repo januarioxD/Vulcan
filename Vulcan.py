@@ -1,4 +1,4 @@
-```python
+
 import streamlit as st
 import cloudinary
 import cloudinary.uploader
