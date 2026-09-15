@@ -9,16 +9,10 @@ import html
 # CONFIGURAÇÃO
 # ============================================================
 
-st.set_page_config(
-    page_title="VULCAN • Ant Cheaters",
-    page_icon="🛡️",
-    layout="centered",
-    initial_sidebar_state="collapsed"
-)
+st.title("🛡️ VULCAN")
+st.caption("ANT CHEATERS • EVIDENCE CENTER")
 
-MAX_FILE_SIZE_MB = 200
-MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
-
+st.success("● SISTEMA ONLINE")
 
 # ============================================================
 # CLOUDINARY
