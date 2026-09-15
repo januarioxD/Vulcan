@@ -11,7 +11,6 @@ import html
 
 st.title("🛡️ VULCAN")
 st.caption("ANT CHEATERS • EVIDENCE CENTER")
-
 st.success("● SISTEMA ONLINE")
 
 # ============================================================
@@ -34,7 +33,6 @@ try:
 
 except Exception:
     CLOUDINARY_CONFIGURADO = False
-
 
 # ============================================================
 # SESSION STATE
