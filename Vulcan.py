@@ -21,6 +21,7 @@ st.set_page_config(
 try:
     cloudinary.config(
         cloud_name=st.secrets["cloudinary"]["cloud_name"],
+        st.write("CLOUD NAME:", repr(cloud_name))
         api_key=st.secrets["cloudinary"]["api_key"],
         api_secret=st.secrets["cloudinary"]["api_secret"],
         secure=True
