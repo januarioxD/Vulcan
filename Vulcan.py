@@ -20,13 +20,21 @@ st.set_page_config(
 
 try:
     cloudinary.config(
-     st.write("Cloud name carregado:",cloud_name=st.secrets["cloudinary"]["cloud_name"],
+        cloud_name=st.secrets["cloudinary"]["cloud_name"],
         api_key=st.secrets["cloudinary"]["api_key"],
         api_secret=st.secrets["cloudinary"]["api_secret"],
         secure=True
     )
 
+    st.write(
+        "Cloud name carregado:",
+        st.secrets["cloudinary"]["cloud_name"]
+    )
+
     CLOUDINARY_CONFIGURADO = True
+
+except Exception as erro:
+    CLOUDINARY_CONFIGURADO = False
 
 except Exception:
     CLOUDINARY_CONFIGURADO = False
