@@ -1,9 +1,9 @@
+```python
 import streamlit as st
 import cloudinary
 import cloudinary.uploader
 from datetime import datetime
 import uuid
-
 
 
 
@@ -14,35 +14,63 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+
+
+
 MAX_FILE_SIZE_MB = 200
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 
+# Formatos de vídeo aceitos
+FORMATOS_VIDEO = [
+    "mp4",
+    "mov",
+    "avi",
+    "mkv",
+    "webm",
+    "m4v",
+    "mpeg",
+    "mpg",
+    "wmv",
+    "flv"
+]
 
 
-st.markdown("""
-<style>
+FORMATOS_VIDEO_TEXTO = (
+    "MP4, MOV, AVI, MKV, WEBM, M4V, "
+    "MPEG, MPG, WMV e FLV"
+)
 
-.stApp {
-    background-color: #080808;
-}
 
-.block-container {
-    max-width: 900px;
-    padding-top: 2rem;
-    padding-bottom: 4rem;
-}
 
-h1, h2, h3 {
-    color: #ff4444 !important;
-}
 
-.stButton > button {
-    border-radius: 8px;
-}
+st.markdown(
+    """
+    <style>
 
-</style>
-""", unsafe_allow_html=True)
+    .stApp {
+        background-color: #080808;
+    }
+
+    .block-container {
+        max-width: 900px;
+        padding-top: 2rem;
+        padding-bottom: 4rem;
+    }
+
+    h1, h2, h3 {
+        color: #ff4444 !important;
+    }
+
+    .stButton > button {
+        border-radius: 8px;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 
 
@@ -75,7 +103,6 @@ if "ultima_denuncia" not in st.session_state:
 
 
 
-
 st.title("🛡️ VULCAN")
 
 st.caption(
@@ -90,7 +117,9 @@ st.divider()
 
 
 
+
 video_url = st.query_params.get("video")
+
 
 if video_url:
 
@@ -124,6 +153,7 @@ if video_url:
         ):
 
             st.query_params.clear()
+
             st.rerun()
 
     except Exception:
@@ -136,7 +166,6 @@ if video_url:
 
 
 
-
 st.header("🛡️ Central de evidências")
 
 st.write(
@@ -144,37 +173,66 @@ st.write(
     "uma evidência compartilhável através de um link público."
 )
 
+
 col1, col2, col3, col4 = st.columns(4)
 
+
 with col1:
-    st.metric("Formato", "MP4")
+
+    st.metric(
+        "Formatos",
+        "10"
+    )
+
 
 with col2:
-    st.metric("Limite", "200 MB")
+
+    st.metric(
+        "Limite",
+        "200 MB"
+    )
+
 
 with col3:
-    st.metric("Armazenamento", "Cloud")
+
+    st.metric(
+        "Armazenamento",
+        "Cloud"
+    )
+
 
 with col4:
-    st.metric("Status", "Online")
+
+    st.metric(
+        "Status",
+        "Online"
+    )
 
 
 
 
 with st.expander("🛡️ Como funciona"):
 
-    st.write("**1.** Preencha as informações da denúncia.")
+    st.write(
+        "**1.** Preencha as informações da denúncia."
+    )
 
-    st.write("**2.** Selecione o vídeo da evidência.")
+    st.write(
+        "**2.** Selecione o vídeo da evidência."
+    )
 
-    st.write("**3.** Confira o preview antes do envio.")
+    st.write(
+        "**3.** Confira o preview antes do envio."
+    )
 
-    st.write("**4.** Envie o vídeo para o sistema.")
+    st.write(
+        "**4.** Envie o vídeo para o sistema."
+    )
 
-    st.write("**5.** Receba um link público para compartilhar.")
-
-
-
+    st.write(
+        "**5.** Receba um link público para compartilhar."
+    )
+=
 
 st.header("📞 Central de denúncias")
 
@@ -184,14 +242,12 @@ st.info(
 )
 
 
-# ============================================================
-# FORMULÁRIO
-# ============================================================
 
 titulo = st.text_input(
     "🏷️ Nome da denúncia",
     placeholder="Ex.: Suspeita de aimbot"
 )
+
 
 descricao = st.text_area(
     "📝 Descrição",
@@ -199,17 +255,26 @@ descricao = st.text_area(
 )
 
 
-# ============================================================
-# UPLOAD
-# ============================================================
 
 st.subheader("📤 Evidência em vídeo")
 
+st.write(
+    f"**Formatos aceitos:** {FORMATOS_VIDEO_TEXTO}"
+)
+
+st.write(
+    f"**Tamanho máximo:** {MAX_FILE_SIZE_MB} MB"
+)
+
+
 video = st.file_uploader(
     "Arraste o vídeo para esta área ou clique para selecionar",
-    type=["mp4"],
+    type=FORMATOS_VIDEO,
     accept_multiple_files=False,
-    help="Somente MP4. Tamanho máximo: 200 MB."
+    help=(
+        f"Formatos aceitos: {FORMATOS_VIDEO_TEXTO}. "
+        f"Tamanho máximo: {MAX_FILE_SIZE_MB} MB."
+    )
 )
 
 
@@ -219,6 +284,8 @@ if video is not None:
 
     tamanho_mb = video.size / (1024 * 1024)
 
+    extensao = video.name.lower().split(".")[-1]
+
     st.subheader("📹 Preview da evidência")
 
     st.write(
@@ -226,8 +293,17 @@ if video is not None:
     )
 
     st.write(
+        f"**Formato:** {extensao.upper()}"
+    )
+
+    st.write(
         f"**Tamanho:** {tamanho_mb:.2f} MB"
     )
+
+
+    # --------------------------------------------------------
+    # VERIFICAR TAMANHO
+    # --------------------------------------------------------
 
     if tamanho_mb > MAX_FILE_SIZE_MB:
 
@@ -236,16 +312,43 @@ if video is not None:
             f"{MAX_FILE_SIZE_MB} MB."
         )
 
+-
+
+    elif extensao not in FORMATOS_VIDEO:
+
+        st.error(
+            "❌ Este formato de vídeo não é suportado."
+        )
+
+
+
     else:
 
         st.success(
-            "Arquivo dentro do limite permitido."
+            "✅ Arquivo dentro do limite permitido."
         )
 
-        st.video(video)
+        st.info(
+            f"🎬 Formato detectado: {extensao.upper()}"
+        )
+
+        # Preview
+        try:
+
+            st.video(video)
+
+        except Exception:
+
+            st.warning(
+                "⚠️ O navegador não conseguiu reproduzir "
+                "este formato diretamente. "
+                "O arquivo ainda poderá ser enviado."
+            )
 
 
-
+# ============================================================
+# SEGURANÇA
+# ============================================================
 
 st.subheader("🔒 Segurança")
 
@@ -254,18 +357,18 @@ st.warning(
     "Envie somente evidências relacionadas à denúncia."
 )
 
+
 st.write(
-    "• Somente arquivos MP4 são aceitos."
+    f"• Formatos aceitos: {FORMATOS_VIDEO_TEXTO}."
 )
 
 st.write(
-    "• Tamanho máximo: 200 MB."
+    f"• Tamanho máximo: {MAX_FILE_SIZE_MB} MB."
 )
 
 st.write(
     "• Os links gerados podem ser compartilhados."
 )
-
 
 
 
@@ -275,7 +378,7 @@ if st.button(
     type="primary"
 ):
 
-    # Verificar Cloudinary
+
 
     if not CLOUDINARY_CONFIGURADO:
 
@@ -286,7 +389,9 @@ if st.button(
         st.stop()
 
 
-    # Verificar título
+    # ========================================================
+    # TÍTULO
+    # ========================================================
 
     if not titulo.strip():
 
@@ -297,19 +402,18 @@ if st.button(
         st.stop()
 
 
-    # Verificar vídeo
+
 
     if video is None:
 
         st.warning(
-            "⚠️ Selecione um vídeo MP4."
+            "⚠️ Selecione um vídeo."
         )
 
         st.stop()
 
 
-    # Verificar tamanho
-
+   
     if video.size > MAX_FILE_SIZE_BYTES:
 
         st.error(
@@ -320,21 +424,21 @@ if st.button(
         st.stop()
 
 
-    # Verificar extensão
+  
 
-    if not video.name.lower().endswith(".mp4"):
+    extensao = video.name.lower().split(".")[-1]
+
+
+    if extensao not in FORMATOS_VIDEO:
 
         st.error(
-            "❌ O arquivo precisa estar no formato MP4."
+            "❌ O formato deste vídeo não é suportado."
         )
 
         st.stop()
 
 
-    # ========================================================
-    # ID DA DENÚNCIA
-    # ========================================================
-
+    
     denuncia_id = (
         "VUL-"
         + datetime.now().strftime("%Y%m%d")
@@ -342,82 +446,119 @@ if st.button(
         + uuid.uuid4().hex[:6].upper()
     )
 
+
     data_envio = datetime.now().strftime(
         "%d/%m/%Y %H:%M:%S"
     )
 
 
-    # ========================================================
-    # ENVIO
-    # ========================================================
-
     status = st.empty()
 
     progresso = st.progress(0)
+
 
     status.info(
         f"☁️ Enviando {denuncia_id}..."
     )
 
-    progresso.progress(25)
+
+    progresso.progress(10)
 
 
     try:
 
+       
         resultado = cloudinary.uploader.upload(
             video.getvalue(),
+
             resource_type="video",
+
             folder="vulcan_ant_cheaters",
+
             use_filename=True,
+
             unique_filename=True
         )
 
+
         progresso.progress(100)
+
+
+     
 
         link_video = resultado["secure_url"]
 
 
-        # ====================================================
-        # REGISTRO
-        # ====================================================
+
 
         registro = {
+
             "id": denuncia_id,
+
             "titulo": titulo,
+
             "descricao": descricao,
+
             "data": data_envio,
+
+            "arquivo": video.name,
+
+            "formato": extensao.upper(),
+
+            "tamanho": f"{video.size / (1024 * 1024):.2f} MB",
+
             "link": link_video,
+
             "status": "Concluído"
         }
+
 
         st.session_state.historico.insert(
             0,
             registro
         )
 
+
         st.session_state.ultima_denuncia = registro
 
 
-        # ====================================================
-        # RESULTADO
-        # ====================================================
-
+      
         status.success(
             f"✅ {denuncia_id} enviado com sucesso!"
         )
 
+
         st.header("✅ Evidência enviada")
+
 
         st.success(
             f"Denúncia {denuncia_id} concluída."
         )
 
+
+        st.write(
+            f"**Arquivo:** {video.name}"
+        )
+
+
+        st.write(
+            f"**Formato:** {extensao.upper()}"
+        )
+
+
+        st.write(
+            f"**Tamanho:** {video.size / (1024 * 1024):.2f} MB"
+        )
+
+
         st.subheader("🔗 Link público")
+
 
         st.code(
             link_video,
             language=None
         )
+
 
         st.link_button(
             "🎥 Abrir vídeo",
@@ -425,10 +566,13 @@ if st.button(
             use_container_width=True
         )
 
+
         st.info(
             "💡 Para copiar o link, clique no botão de copiar "
             "do campo acima."
         )
+
+
 
 
     except Exception as erro:
@@ -444,9 +588,6 @@ if st.button(
         )
 
 
-# ============================================================
-# HISTÓRICO
-# ============================================================
 
 if st.session_state.historico:
 
@@ -457,6 +598,7 @@ if st.session_state.historico:
     st.write(
         "As evidências abaixo foram enviadas durante esta sessão."
     )
+
 
     for item in st.session_state.historico:
 
@@ -472,18 +614,36 @@ if st.session_state.historico:
                 f"**Status:** {item['status']}"
             )
 
+            st.write(
+                f"**Arquivo:** {item['arquivo']}"
+            )
+
+            st.write(
+                f"**Formato:** {item['formato']}"
+            )
+
+            st.write(
+                f"**Tamanho:** {item['tamanho']}"
+            )
+
+
             if item["descricao"]:
 
                 st.write(
                     f"**Descrição:** {item['descricao']}"
                 )
 
-            st.write("**Link:**")
+
+            st.write(
+                "**Link:**"
+            )
+
 
             st.code(
                 item["link"],
                 language=None
             )
+
 
             st.link_button(
                 "🎥 Abrir vídeo",
@@ -492,16 +652,18 @@ if st.session_state.historico:
             )
 
 
-# ============================================================
-# RODAPÉ
-# ============================================================
+
 
 st.divider()
+
 
 st.caption(
     "VULCAN ANT CHEATERS • Evidence Center"
 )
 
+
 st.caption(
     "Sistema de gerenciamento de evidências"
 )
+
+
