@@ -232,7 +232,7 @@ with st.expander("🛡️ Como funciona"):
     st.write(
         "**5.** Receba um link público para compartilhar."
     )
-=
+
 
 st.header("📞 Central de denúncias")
 
